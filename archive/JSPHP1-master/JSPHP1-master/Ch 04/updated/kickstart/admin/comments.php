@@ -1,3 +1,0 @@
-<?php
-
-	$admin = new Comments;
