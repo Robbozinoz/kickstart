@@ -2,7 +2,18 @@
 
     require_once('database.php');
 
-    class Blog{
+    //Chapter 5 addition
+    public function __construct() {
+        parent:: __construct();
+        $this->comments = new Comments();
+        if (!empty($_GET['id'])) {
+            $this->viewPost($_GET['id']);
+        } else {
+            $this->getPosts();
+        }
+    }   
+
+    class Blog {
         public $ksdb = '';
         public $base = '';
         public function __construct(){
@@ -12,8 +23,8 @@
         }
     }
 
-    class Posts extends Blog{
-
+    class Posts extends Blog {
+        //Page 90 editing of the construct function
         public function __construct(){
             parent::__construct();
             $this->comments = new Comments;
