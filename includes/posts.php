@@ -2,17 +2,6 @@
 
     require_once('database.php');
 
-    //Chapter 5 addition
-    public function __construct() {
-        parent:: __construct();
-        $this->comments = new Comments();
-        if (!empty($_GET['id'])) {
-            $this->viewPost($_GET['id']);
-        } else {
-            $this->getPosts();
-        }
-    }   
-
     class Blog {
         public $ksdb = '';
         public $base = '';
@@ -80,9 +69,16 @@
     }
 
     class Comments extends Blog{
-        public function __construct(){
-            parent::__construct();
-        }
+        //Chapter 5 addition - CHECK if needed
+        //public function __construct(){
+          //  parent:: __construct();
+            //$this->comments = new Comments();
+            //if (!empty($_GET['id'])) {
+              //  $this->viewPost($_GET['id']);
+            //} else {
+              //  $this->getPosts();
+            //}
+        //}   
 
         public function commentNumber($postId){
 
