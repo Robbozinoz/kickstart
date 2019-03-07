@@ -12,7 +12,7 @@ class Database{
         $this->dbserver = 'localhost';
         $this->username = 'jr_kickstart';
         $this->password = 'kickstart';
-        $this->database = 'XXX';
+        $this->database = 'testposts';
         $this->db = new PDO("mysql:host=".$this->dbserver.";
         dbname=".$this->database, $this->username, $this->password);
     }

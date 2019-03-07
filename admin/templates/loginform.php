@@ -1,5 +1,6 @@
-//Login inform template for use after valisdation p97
-<?php require_once 'includes/temps/header.php'; ?>
+<!--Login form template for use after validation p97-->
+<!--Change to require -Robboz-->
+<?php require_once('includes/temps/header.php'); ?>
 <br>
 <?php if (!empty($error)): ?> 
     <div class="alert alert-error">-<?php echo $error; ?></div>
@@ -27,5 +28,6 @@
         </div>
     </div>
 </form>
-<?php require_once 'includes/temps/footer.php'; ?>
+<!--Change to require -Robboz-->
+<?php require_once('includes/temps/footer.php'); ?>
 

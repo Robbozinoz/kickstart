@@ -1,4 +1,4 @@
 <?php
     require_once('includes/login.php');
 
-    $login   = new Login;
+    $login = new Login;
