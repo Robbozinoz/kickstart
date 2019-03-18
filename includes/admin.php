@@ -3,9 +3,26 @@ session_start();
 require_once('database.php');
 class Adminpanel {
     public function __construct() {
-        $this->ksdb = new Database;
-        $this->base = (object) '';
-        $this->base->url = "http://".$_SERVER['SERVER_NAME'];
+        $inactive = 600;
+        if (isset($_SESSION['kickstart_login'])) {
+            $sessionTTL = time() - $_SESSION['timeout'];
+            if ($sessionTTL > $inactive) {
+                session_unset();
+                session_destroy();
+                header('Location: http://' . $_SERVER['SERVER_NAME'] . '/login.php?status=inactive');
+            }
+        }
+        $_SESSION['timeout'] = time();
+        $login = $_SESSION['kickstart_login'];
+        if (empty($login)) {
+            session_unset();
+            session_destroy();
+            header('Location: http://' . $_SERVER['SERVER_NAME'] . '/login.php?status=loggedout');
+        } else {
+            $this->ksdb = new Database;
+            $this->base = (object) '';
+            $this->base->url = 'http://'.$_SERVER['SERVER_NAME'];
+        }
     }
 }
 
@@ -13,7 +30,25 @@ class Posts extends Adminpanel {
 
     public function __construct(){
         parent::__construct();
-        //This needs to be expanded - check book
+        //p115 posts class setting
+        if (!empty($_GET['action'])) {
+            switch ($_GET['action']) {
+                case 'create':
+                    $this->addPost();
+                    break;
+                default:
+                    $this->listPosts();
+                    break;
+                case 'save':
+                    $this->savePost();
+                    break;
+                case 'delete':
+                    $this->deletePost();
+                    break;
+            }
+        } else {
+            $this->listPosts();
+        }
     }
 
     public function listPosts(){
@@ -101,7 +136,18 @@ class Posts extends Adminpanel {
     }
 
     public function deletePost() {
-
+        if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
+            $query = "DELETE FROM `posts` WHERE id = ?";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute(array($_GET['id']));
+            $delete = $stmt->rowCount();
+            $this->db = null;
+            if (!empty($delete) && $delete > 0) {
+                header('Location: ' . $this->base->url . '/posts.php?delete=success');
+            } else {
+                header('Location: ' . $this->base->url . '/posts.php?delete=error');
+            }
+        }
     }
 }
 
