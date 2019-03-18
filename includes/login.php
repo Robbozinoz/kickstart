@@ -54,7 +54,7 @@
             header('Location: ' . $this->base->url . '/admin/posts.php');
             return;
         }
-
+        
         public function loginFail(){
             return 'Your Username/Password was incorrect';
         }
