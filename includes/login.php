@@ -16,18 +16,42 @@
 
         //Checks to see if the user has logged in
         public function index(){
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $this->validateDetails();
-            } elseif (!empty($_GET['status']) && $_GET['status'] == 'inactive') {
-                $error = 'You have been logged out due to falling asleep. Please wake up and login again.';
+            if (!empty($_GET['status']) && $_GET['status'] == 'logout') {
+                session_unset();
+                session_destroy();
+                $error = 'You have been logged out. Please login in again. ';
+                require_once('admin/templates/loginform.php');
+            } elseif (!empty($_SESSION['kickstart_login']) && $_SESSION['kickstart_login']) {
+                header('Location: ' . $this->base->url . '/admin/posts.php');
+                exit();
+            } else {
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $this->validateDetails();
+                } elseif (!empty($_GET['status'])) {
+                    if ($_GET['status'] == 'inactive') {
+                        session_unset();
+                        session_destroy();
+                        $error = 'You have been logged out due to falling asleep. Please wake up and login again.';
+                    }
+                }
+                require_once('admin/templates/loginform.php');
             }
+            //Removed p114
+            //if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+              //  $this->validateDetails();
+            //} elseif (!empty($_GET['status']) && $_GET['status'] == 'inactive') {
+              //  $error = 'You have been logged out due to falling asleep. Please wake up and login again.';
+            //}
             //Change to require - robboz
-            require_once('admin/templates/loginform.php');
+         
         }
 
         //Header request for server to send location detail
+        //Replaced p113 - header('Location: http:' . $_SERVER['SERVER_NAME'] . '/admin/posts.php');
         public function loginSuccess(){
-            header('Location: http://' . $_SERVER['SERVER_NAME'] . '/admin/posts.php');
+            $_SESSION['kickstart_login'] = true;
+            $_SESSION["timeout"] = time();
+            header('Location: ' . $this->base->url . '/admin/posts.php');
             return;
         }
 
@@ -45,7 +69,7 @@
                 try {
                     $query->execute();
                     //Check change $query->execute(array($_POST['username'], $password));
-                    for ($i=0; $row = $query->fetch() ; $i++) {
+                    for ($i=0; $row = $query->fetch(); $i++) {
                         $return[$i] = array(); 
                         foreach ($row as $key => $rowitem) {
                             $return[$i] = $rowitem;

@@ -1,5 +1,6 @@
 <?php require_once('_inc/header.php'); ?>
-<a href="<?php echo $this->base->url. '/posts.php?action=create'; ?> class="btn btn-info">Create Post</a>
+<a href="<?php echo $this->base->url . '/posts.php?action=create'; ?> class="btn btn-info">Create Post</a>
+<a href="<?php echo $this->base->url . '/comments.php'; ?>" class="btn btn-info">Comments</a>
 <table>
     <thead>
         <tr>
